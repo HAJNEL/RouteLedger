@@ -260,7 +260,7 @@ export default function TripsView() {
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase font-mono tracking-wider text-gray-400 mb-1">Freight Invoice Revenue (£)</label>
+                <label className="block text-[10px] uppercase font-mono tracking-wider text-gray-400 mb-1">Freight Invoice Revenue (R)</label>
                 <input
                   type="number"
                   required
@@ -348,7 +348,7 @@ export default function TripsView() {
                       {trip.scheduled_date}
                     </td>
                     <td className="py-3 px-4 text-right font-mono font-bold text-gray-900 dark:text-zinc-50">
-                      £{trip.freight_revenue.toFixed(2)}
+                      R{trip.freight_revenue.toFixed(2)}
                     </td>
                     <td className="py-3 px-4 text-center">
                       <span className={`inline-block px-2.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wide ${

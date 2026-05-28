@@ -755,7 +755,7 @@ export default function InvoicesView() {
                         />
                       </td>
                       <td className="p-2 font-mono font-medium">
-                        £{item.line_item_value?.toFixed(2) || "0.00"}
+                        R{item.line_item_value?.toFixed(2) || "0.00"}
                       </td>
                       <td className="p-2 text-center">
                         <button
@@ -812,7 +812,7 @@ export default function InvoicesView() {
               <div className="flex justify-between items-center bg-transparent border-t border-gray-200 dark:border-zinc-800 pt-2 font-bold select-none text-gray-900 dark:text-zinc-100">
                 <span>Final Total Balance Due</span>
                 <div className="flex items-center gap-1.5 font-mono">
-                  <span>£</span>
+                  <span>R</span>
                   <input
                     type="number"
                     value={activeExtraction.summary?.total_due || 0}
@@ -944,7 +944,7 @@ export default function InvoicesView() {
                     </td>
                     <td className="py-3 px-4 font-mono text-center">{inv.line_items.length} items</td>
                     <td className="py-3 px-4 font-bold text-right font-mono text-gray-905 dark:text-zinc-50">
-                      £{inv.summary.total_due.toFixed(2)}
+                      R{inv.summary.total_due.toFixed(2)}
                     </td>
                     <td className="py-3 px-4 text-center">
                       <span className={`inline-block px-2.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wide ${
