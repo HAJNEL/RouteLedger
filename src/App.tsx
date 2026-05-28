@@ -16,10 +16,10 @@ function MainAppDispatcher() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-50 font-sans transition-colors duration-255">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-sans transition-colors duration-255">
         <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-xs font-mono font-bold uppercase tracking-wider text-gray-400 dark:text-zinc-500 mt-5">
-          Initializing RouteLedger Secure Session Gate...
+        <p className="text-xs font-mono font-bold uppercase tracking-wider text-[#71717a] dark:text-zinc-500 mt-5">
+          Initializing InvoiceForge Secure Session Gate...
         </p>
       </div>
     );
@@ -34,7 +34,7 @@ function MainAppDispatcher() {
   const renderActiveSection = () => {
     switch (activeSection) {
       case "Dashboard":
-        return <DashboardView />;
+        return <DashboardView setActiveSection={setActiveSection} />;
       case "Invoices":
         return <InvoicesView />;
       case "Trips":

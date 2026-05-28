@@ -15,7 +15,8 @@ import {
   ClipboardList,
   Package,
   Truck as TruckIcon,
-  FileText
+  FileText,
+  Plus
 } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -41,7 +42,7 @@ function getWeekdayIndex(dateStr: string): number {
   return dayOfWeek === 0 ? 6 : dayOfWeek - 1;
 }
 
-export default function DashboardView() {
+export default function DashboardView({ setActiveSection }: { setActiveSection?: (sec: any) => void }) {
   const { user } = useAuth();
   const userId = user?.userId || "simulated-user";
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -98,6 +99,36 @@ export default function DashboardView() {
 
   return (
     <div className="space-y-6">
+      {/* Financial Overview Header with Screenshot Action Buttons */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-sans font-bold tracking-tight text-gray-900 dark:text-white">
+            Financial Overview
+          </h1>
+          <p className="text-sm text-[#71717a] dark:text-zinc-400 mt-1">
+            Monitor your business performance and invoice status.
+          </p>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setActiveSection?.("Invoices")}
+            className="flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-white dark:bg-zinc-900 text-gray-700 dark:text-zinc-200 border border-gray-200 dark:border-zinc-800 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-all cursor-pointer shadow-xs"
+            id="dashboard-bulk-import-btn"
+          >
+            <Clock className="w-4 h-4 text-gray-500 dark:text-zinc-400" />
+            Bulk Import
+          </button>
+          <button
+            onClick={() => setActiveSection?.("Invoices")}
+            className="flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-gray-950 hover:bg-zinc-900 dark:bg-zinc-50 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 rounded-xl transition-all cursor-pointer shadow-sm"
+            id="dashboard-new-invoice-btn"
+          >
+            <Plus className="w-4 h-4" />
+            New Invoice
+          </button>
+        </div>
+      </div>
+
       {/* Overview Stat Cards with soft grid container */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Card 1: ASSEMBLY */}
@@ -268,19 +299,19 @@ export default function DashboardView() {
                         {hasSchedule ? (
                           <button
                             onClick={() => setSelectedCell({ truck, weekdayIndex: day.index, trips: cellTrips })}
-                            className="w-full h-full aspect-[4/3] min-h-[64px] bg-[#f1f3ff] dark:bg-indigo-950/20 hover:bg-[#e4e8ff] dark:hover:bg-indigo-900/35 border border-[#dee3ff] dark:border-indigo-900/40 rounded-xl flex flex-col items-center justify-center transition-all shadow-xs cursor-pointer active:scale-95 group"
+                            className="w-full h-full aspect-[4/3] bg-[#f1f3ff] dark:bg-indigo-950/25 hover:bg-[#e4e8ff] dark:hover:bg-indigo-900/40 border border-[#dee3ff] dark:border-indigo-900/50 rounded-xl flex flex-col items-center justify-center transition-all shadow-xs cursor-pointer active:scale-95 group min-h-[58px]"
                             title={`${cellTrips.length} active dispatches. Click to view.`}
                           >
-                            <span className="text-base font-sans font-black text-[#4f46e5] dark:text-indigo-400 group-hover:scale-105 transition-transform">
+                            <span className="text-base font-sans font-black text-[#4f46e5] dark:text-indigo-400 group-hover:scale-105 transition-transform font-bold">
                               {cellTrips.length}
                             </span>
-                            <span className="text-[8px] sm:text-[9px] font-mono font-bold tracking-widest text-[#4f46e5] dark:text-indigo-400 uppercase mt-0.5">
+                            <span className="text-[9px] font-mono font-bold tracking-widest text-[#4f46e5] dark:text-indigo-400 uppercase mt-0.5">
                               {cellTrips.length === 1 ? "Drop" : "Drops"}
                             </span>
                           </button>
                         ) : (
-                          <div className="w-full h-full aspect-[4/3] min-h-[64px] bg-gray-50/40 dark:bg-zinc-850/15 border border-dashed border-gray-155 dark:border-zinc-800/60 rounded-xl flex items-center justify-center text-[#cbd5e1] dark:text-zinc-700 select-none">
-                            <span className="text-xl">·</span>
+                          <div className="w-full h-full aspect-[4/3] flex items-center justify-center text-[#cbd5e1]/55 dark:text-zinc-700 select-none min-h-[58px]">
+                            <span className="text-lg font-bold">·</span>
                           </div>
                         )}
                       </div>

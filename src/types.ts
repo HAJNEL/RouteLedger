@@ -78,3 +78,15 @@ export interface UserSession {
 }
 
 export type MenuSection = "Dashboard" | "Invoices" | "Trips" | "Trucks" | "Settings";
+
+export interface Warehouse {
+  id: string;
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+  capacity_sqm?: number;
+  contact_number?: string;
+  userId: string;
+}
+

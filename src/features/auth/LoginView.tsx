@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "./AuthContext";
-import { Truck, Lock, Mail, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { FileSpreadsheet, Lock, Mail, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { motion } from "motion/react";
 
 export default function LoginView() {
@@ -35,7 +35,7 @@ export default function LoginView() {
     try {
       if (isSignUp) {
         await signUp(email, password);
-        setNotifMessage("Account registered successfully! Welcome to RouteLedger.");
+        setNotifMessage("Account registered successfully! Welcome to InvoiceForge.");
       } else {
         await login(email, password);
       }
@@ -55,23 +55,23 @@ export default function LoginView() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-950 px-4 transition-colors duration-300">
       <div className="absolute top-4 right-4 text-xs font-mono text-gray-500 dark:text-zinc-500">
-        RouteLedger v1.4 • Live Secure Env
+        InvoiceForge v1.4 • Live Secure Env
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="w-full max-w-md bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden p-8"
-        id="login-card"
+         initial={{ opacity: 0, y: 15 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ duration: 0.4, ease: "easeOut" }}
+         className="w-full max-w-md bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden p-8"
+         id="login-card"
       >
         {/* Banner Logo */}
         <div className="flex flex-col items-center mb-8">
           <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white mb-3 shadow-md shadow-indigo-200 dark:shadow-none">
-            <Truck className="w-6 h-6" id="login-logo-truck" />
+            <FileSpreadsheet className="w-6 h-6" id="login-logo-doc" />
           </div>
-          <h1 className="text-2xl font-sans tracking-tight font-semibold text-gray-900 dark:text-zinc-50">
-            RouteLedger
+          <h1 className="text-2xl font-sans tracking-tight font-bold text-gray-900 dark:text-zinc-50">
+            InvoiceForge
           </h1>
           <p className="text-sm font-sans text-gray-500 dark:text-zinc-400 mt-1">
             Logistics, Intelligent Invoicing & Fleet Audits
@@ -86,10 +86,10 @@ export default function LoginView() {
               clearError();
               setNotifMessage(null);
             }}
-            className={`flex-1 pb-3 text-sm font-medium transition-all ${
+            className={`flex-1 pb-3 text-sm font-medium transition-all cursor-pointer ${
               !isSignUp
-                ? "text-indigo-600 border-b-2 border-indigo-600 dark:text-indigo-400 dark:border-indigo-400"
-                : "text-gray-400 dark:text-zinc-500"
+                ? "text-indigo-600 border-b-2 border-indigo-600 dark:text-indigo-400 dark:border-indigo-400 font-semibold"
+                : "text-gray-400 dark:text-zinc-500 hover:text-gray-600"
             }`}
             id="tab-signin"
           >
@@ -101,10 +101,10 @@ export default function LoginView() {
               clearError();
               setNotifMessage(null);
             }}
-            className={`flex-1 pb-3 text-sm font-medium transition-all ${
+            className={`flex-1 pb-3 text-sm font-medium transition-all cursor-pointer ${
               isSignUp
-                ? "text-indigo-600 border-b-2 border-indigo-600 dark:text-indigo-400 dark:border-indigo-400"
-                : "text-gray-400 dark:text-zinc-500"
+                ? "text-indigo-600 border-b-2 border-indigo-600 dark:text-indigo-400 dark:border-indigo-400 font-semibold"
+                : "text-gray-400 dark:text-zinc-500 hover:text-gray-600"
             }`}
             id="tab-register"
           >

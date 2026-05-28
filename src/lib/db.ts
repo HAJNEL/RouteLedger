@@ -10,7 +10,7 @@ import {
   getDocFromServer
 } from "firebase/firestore";
 import { db, auth, isRealFirebase } from "./firebase";
-import { Invoice, Trip, Truck, UserSession } from "../types";
+import { Invoice, Trip, Truck, UserSession, Warehouse } from "../types";
 
 // Firebase Integration error handling enum and interface as mandated in SKILL.md
 export enum OperationType {
@@ -235,6 +235,30 @@ const PRE_SEEDED_TRUCKS: Truck[] = [
   }
 ];
 
+// Pre-seeded high fidelity warehouses
+const PRE_SEEDED_WAREHOUSES: Warehouse[] = [
+  {
+    id: "wh-1",
+    name: "London Gateway Central Depot",
+    address: "Royal Albert Dock, London E16 2QX",
+    lat: 51.5074,
+    lng: 0.1278,
+    capacity_sqm: 12500,
+    contact_number: "+44 20 7918 2000",
+    userId: "simulated-user"
+  },
+  {
+    id: "wh-2",
+    name: "Midlands Freight Hub",
+    address: "Intermodal Park, Birmingham B46 1AL",
+    lat: 52.4862,
+    lng: -1.8904,
+    capacity_sqm: 8400,
+    contact_number: "+44 121 496 0321",
+    userId: "simulated-user"
+  }
+];
+
 // Initialize local storage states if empty
 const initLocalStorage = () => {
   if (!localStorage.getItem("rl_invoices")) {
@@ -245,6 +269,9 @@ const initLocalStorage = () => {
   }
   if (!localStorage.getItem("rl_trucks")) {
     localStorage.setItem("rl_trucks", JSON.stringify(PRE_SEEDED_TRUCKS));
+  }
+  if (!localStorage.getItem("rl_warehouses")) {
+    localStorage.setItem("rl_warehouses", JSON.stringify(PRE_SEEDED_WAREHOUSES));
   }
   if (!localStorage.getItem("rl_user")) {
     localStorage.setItem("rl_user", JSON.stringify({ userId: "simulated-user", email: "hajnel20@gmail.com" }));
@@ -383,5 +410,71 @@ export const dbService = {
     let list = raw ? JSON.parse(raw) : [];
     list = list.filter((x: Truck) => x.id !== truckId);
     localStorage.setItem("rl_trucks", JSON.stringify(list));
+  },
+
+  // Warehouses Driver
+  async getWarehouses(uid: string): Promise<Warehouse[]> {
+    if (isRealFirebase && db) {
+      const colPath = "warehouses";
+      try {
+        const q = query(collection(db, colPath), where("userId", "==", uid));
+        const snapshot = await getDocs(q);
+        const docsList = snapshot.docs.map(docSnapshot => ({
+          id: docSnapshot.id,
+          ...docSnapshot.data()
+        })) as Warehouse[];
+        return docsList;
+      } catch (error) {
+        handleFirestoreError(error, OperationType.LIST, colPath);
+      }
+    }
+
+    // LocalStorage Fallback
+    const raw = localStorage.getItem("rl_warehouses");
+    const list = raw ? JSON.parse(raw) : [];
+    return list.filter((item: Warehouse) => item.userId === uid || item.userId === "simulated-user");
+  },
+
+  async saveWarehouse(warehouse: Warehouse): Promise<void> {
+    if (isRealFirebase && db) {
+      const docPath = `warehouses/${warehouse.id}`;
+      try {
+        await setDoc(doc(db, "warehouses", warehouse.id), {
+          ...warehouse
+        });
+        return;
+      } catch (error) {
+        handleFirestoreError(error, OperationType.WRITE, docPath);
+      }
+    }
+
+    // LocalStorage Fallback
+    const raw = localStorage.getItem("rl_warehouses");
+    const list = raw ? JSON.parse(raw) : [];
+    const index = list.findIndex((x: Warehouse) => x.id === warehouse.id);
+    if (index >= 0) {
+      list[index] = warehouse;
+    } else {
+      list.unshift(warehouse);
+    }
+    localStorage.setItem("rl_warehouses", JSON.stringify(list));
+  },
+
+  async deleteWarehouse(warehouseId: string): Promise<void> {
+    if (isRealFirebase && db) {
+      const docPath = `warehouses/${warehouseId}`;
+      try {
+        await deleteDoc(doc(db, "warehouses", warehouseId));
+        return;
+      } catch (error) {
+        handleFirestoreError(error, OperationType.DELETE, docPath);
+      }
+    }
+
+    // LocalStorage Fallback
+    const raw = localStorage.getItem("rl_warehouses");
+    let list = raw ? JSON.parse(raw) : [];
+    list = list.filter((x: Warehouse) => x.id !== warehouseId);
+    localStorage.setItem("rl_warehouses", JSON.stringify(list));
   }
 };

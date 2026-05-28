@@ -50,5 +50,38 @@ service cloud.firestore {
       // Delete validation
       allow delete: if isSignedIn() && existing().userId == request.auth.uid;
     }
+
+    // Warehouse Specific Rules
+    match /warehouses/{warehouseId} {
+      // Create validation
+      allow create: if isSignedIn()
+        && isValidId(warehouseId)
+        && incoming().userId == request.auth.uid
+        && incoming().name is string
+        && incoming().name.size() > 0
+        && incoming().name.size() <= 200
+        && incoming().address is string
+        && incoming().address.size() > 0
+        && incoming().address.size() <= 500
+        && (incoming().lat is float || incoming().lat is int)
+        && (incoming().lng is float || incoming().lng is int);
+
+      // Read & List validation
+      allow read, list: if isSignedIn() && resource.data.userId == request.auth.uid;
+
+      // Update validation
+      allow update: if isSignedIn()
+        && existing().userId == request.auth.uid
+        && incoming().userId == request.auth.uid
+        && incoming().name is string
+        && incoming().name.size() > 0
+        && incoming().address is string
+        && incoming().address.size() > 0
+        && (incoming().lat is float || incoming().lat is int)
+        && (incoming().lng is float || incoming().lng is int);
+
+      // Delete validation
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
   }
 }
