@@ -1,0 +1,6 @@
+{
+  "name": "RouteLedger",
+  "description": "Intelligent logistics dashboard with automated PDF invoice extraction, trip scheduling, fleet management, and finance indicators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

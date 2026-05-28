@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "Invoice": {
+      "title": "Invoice",
+      "description": "Extracted and recorded logistics invoices.",
+      "type": "object",
+      "properties": {
+        "invoice_number": {
+          "type": "string"
+        },
+        "invoice_date": {
+          "type": "string"
+        },
+        "customer_purchase_order_number": {
+          "type": "string"
+        },
+        "sales_order_number": {
+          "type": "string"
+        },
+        "delivery_note_number": {
+          "type": "string"
+        },
+        "customer_contact": {
+          "type": "string"
+        },
+        "bill_to_details": {
+          "type": "object"
+        },
+        "ship_to_details": {
+          "type": "object"
+        },
+        "line_items": {
+          "type": "array"
+        },
+        "summary": {
+          "type": "object"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "invoice_number",
+        "invoice_date",
+        "userId"
+      ]
+    }
+  },
+  "firestore": {
+    "invoices/{invoiceId}": {
+      "schema": "Invoice",
+      "description": "Collection of logistics and transportation invoices."
+    }
+  }
+}

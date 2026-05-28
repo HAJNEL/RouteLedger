@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Hardened Reusable Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Invoice Specific Rules
+    match /invoices/{invoiceId} {
+      // Create validation
+      allow create: if isSignedIn()
+        && isValidId(invoiceId)
+        && incoming().userId == request.auth.uid
+        && incoming().invoice_number is string
+        && incoming().invoice_number.size() > 0
+        && incoming().invoice_number.size() <= 200;
+
+      // Read & List validation
+      allow read, list: if isSignedIn() && resource.data.userId == request.auth.uid;
+
+      // Update validation
+      allow update: if isSignedIn()
+        && existing().userId == request.auth.uid
+        && incoming().userId == request.auth.uid
+        && incoming().invoice_number is string
+        && incoming().invoice_number.size() > 0;
+
+      // Delete validation
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+  }
+}
